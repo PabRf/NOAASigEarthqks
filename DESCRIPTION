@@ -1,0 +1,31 @@
+Package: NOAASigEarthqks
+Title: Processing and Visualization of NOAA Significant Earthquakes Dataset
+Version: 0.0.0.9000
+Authors@R: 
+    person("Paul", "Brown", , "pabuwi50@gmail.com", role = c("aut", "cre"))
+Description: This package processes and visualizes the NOAA Significant Earthquakes dataset. This allows the user to
+    extract useful information embedded within.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports: 
+    dplyr,
+    ggplot2,
+    ggiraph,
+    grid,
+    lubridate,
+    magrittr,
+    readr,
+    stats,
+    stringr,
+    tidyr,
+    tidyselect
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Depends: 
+    R (>= 2.10)

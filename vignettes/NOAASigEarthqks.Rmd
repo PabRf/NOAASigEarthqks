@@ -1,0 +1,192 @@
+---
+title: "NOAASigEarthqks_functions"
+author: Paul Brown
+date: "2024.02.28"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{NOAASigEarthqks_functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,comment = "#>")
+
+```
+
+
+## Description
+
+The NOAASigEarthqks functions clean the raw NOAA data frame.
+
+  . eq_location_clean() cleans the LOCATION_NAME column in the raw NOAA data frame.
+
+  . eq_clean_data() cleans the Date, Latitude and Longitude variables in the raw NOAA data frame.
+  
+  . eq_filter_data() further filters and selects the data to produce the final NOAA data frame for analysis.
+  
+  . geom_timeline() produces a layer, that consists of the time line of selected earthquakes ranging from min to
+  max dates (with a point for each earthquake).
+  
+  . geom_timeline_label() produces a layer, that consists of the time line of selected earthquakes ranging from
+  min to max dates (with a point for each earthquake), and a vertical line to selected data points with a text annotation.
+  
+  . eq_map() creates interactive maps of select NOAA earthquake epicenters.
+  
+  . eq_create_label() creates an HTML label that can be used as annotation text in interactive maps of NOAA earthquake epicenters.
+
+
+
+## Usage
+
+library(NOAASigEarthqkDb)
+
+eq_location_clean("earthquakes_-2150to2024.csv")
+
+eq_clean_data("earthquakes_data_clean1.csv")
+
+eq_filter_data("earthquakes_data_clean2.csv", xmin = as.Date("1950-01-01", "%Y-%m-%d"), xmax = as.Date("1955-01-01", "%Y-%m-%d"), c("Date", "xend", "y", "yend", "Mag", "Deaths", "Country"))
+
+ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, y=0.2, size=Mag, colour=Deaths), alpha=0.3)
+ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, Country, size=Mag, colour=Deaths), alpha=0.3)
+
+ggplot() + geom_timeline_label(data=earthquakes_data_final, aes(Date, y=0.2, xend=xend, yend=yend, size=Mag, colour=Deaths,
+  label=Country), alpha=0.3) 
+ggplot() + geom_timeline_label(data=earthquakes_data_final, aes(Date, Country, xend=xend, yend=yend, size=Mag, colour=Deaths,
+  label=Country), alpha=0.3)
+
+library(magrittr)
+dplyr::filter(earthquakes_data_clean2, Country == "MEXICO" & lubridate::year(Date) >= 2000) %>%
+  eq_map(annot_col="Date", -120, -60, 0, 40)
+
+dplyr::filter(earthquakes_data_clean2, Country == "MEXICO" & lubridate::year(Date) >= 2000) %>%
+  dplyr::mutate(popup_text = eq_create_label(.)) %>%
+  eq_map(annot_col="popup_text", -120, -60, 0, 40)
+
+
+
+## Arguments
+
+filename        The name of the file that the function will read into R.
+
+xmin            Minimum date for filtering
+
+xmax            Maximum date for filtering
+
+columns         Columns of interest to select
+
+data            The input database.
+
+panel_params    Set of per-panel parameters for the coord.
+
+coord           Object that describes coordinate system for plot.
+
+mapping         The mapping of variables
+
+geom            The geom to use
+
+stat            The stat to use
+
+position        The position to use
+
+show.legend     Whether to show the legend
+
+inherit.aes     Whether to inherit aesthetics
+
+params          Specified parameters
+
+eq_data         The name of the file that the function will read into R.
+
+annot_col       The column to use for the annotation in the pop-up.
+
+x1              Western longitude limit for plot by 5 degree increments.
+
+x2              Eastern longitude limit for plot by 5 degree increments.
+
+y1              Southern latitude limit for plot by 5 degree increments.
+
+y2              Northern latitude limit for plot by 5 degree increments.
+
+
+
+## Value
+
+  . eq_location_clean() returns a file with cleaned `Location Name' variable.
+
+  . eq_clean_data() returns a file with cleaned Date, Latitude and Longitude variables.
+
+  . eq_filter_data() returns the final NOAA data frame for analysis after further row filtering and column selection.
+  
+  . geom_timeline returns a layer, that consists of the time line of selected earthquakes ranging from min to
+  max dates (with a point for each earthquake).
+  
+  . geom_timeline_label returns a layer, that consists of the time line of selected earthquakes ranging from
+  min to max dates (with a point for each earthquake), and a vertical line to selected data points with a text annotation.
+  
+  . eq_map() maps earthquake epicenters (LATITUDE/LONGITUDE) and annotates each point within a pop up window.
+  
+  . eq_create_label() constructs a character string for each earthquake that includes location, magnitude, and total number of deaths
+
+
+
+
+## Examples
+
+#### Cleans the LOCATION_NAME variable in the raw NOAA data frame
+eq_location_clean("earthquakes_-2150to2024.csv")
+
+#### Cleans the Date, Latitude and Longitude variables
+eq_clean_data("earthquakes_data_clean1.csv")
+
+#### Row filtering and column selection
+eq_filter_data("earthquakes_data_clean2.csv", xmin = as.Date("1950-01-01", "%Y-%m-%d"), xmax = as.Date("1955-01-01", "%Y-%m-%d"), c("Date", "xend", "y", "yend", "Mag", "Deaths", "Country"))
+
+#### Returns a layer of the time line of selected earthquakes
+ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, y=0.2, size=Mag, colour=Deaths), alpha=0.3)
+
+ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, Country, size=Mag, colour=Deaths), alpha=0.3)
+
+#### Returns a layer of the time line of selected earthquakes with text annotation
+ggplot() + geom_timeline_label(data=earthquakes_data_final, aes(Date, y=0.2, xend=xend, yend=yend, size=Mag, colour=Deaths, label=Country), alpha=0.3) +
+    labs(size = "Richter Scale", colour = ("Deaths")) +
+    ylim(c(0,1)) + geom_hline(aes(yintercept = 0.2)) +
+    annotate("text", x=earthquakes_data_final$Date, y=0.42, label=earthquakes_data_final$Country, vjust=0,
+             hjust=-0, size=2, angle=45) +
+    theme(plot.background = element_rect(fill = "white"),
+          panel.background = element_rect(fill = "white", colour = "white", linewidth = 0.5, linetype = "solid"),
+          panel.grid.major = element_line(linewidth = 0.5, linetype = 'solid', colour = "white"),
+          axis.title.y = element_text(colour = "white"), axis.text.y = element_text(colour="white"), axis.ticks.y = element_line(colour = "white"),
+          axis.line.x = element_line(colour = "black"),
+          plot.title = element_text(colour = "white", hjust = 0.5)) +
+    theme(legend.position="bottom") +
+    theme(axis.text.x=element_text(angle=60, hjust=1)) +
+    guides(size = guide_legend(order = 1), colour = guide_colorbar(order = 2), alpha="none")
+
+ggplot() + geom_timeline_label(data=earthquakes_data_final, aes(Date, Country, xend=xend, yend=yend, size=Mag, colour=Deaths, label=Country), alpha=0.3) +
+    labs(size = "Richter Scale", colour = ("Deaths")) +
+    geom_hline(aes(yintercept = earthquakes_data_final$Country)) +
+    annotate("text", x=earthquakes_data_final$Date, y=earthquakes_data_final$Country, label=earthquakes_data_final$Country, vjust=0, hjust=-0.2, size=2, angle=45) +
+    theme(plot.background = element_rect(fill = "white"),
+          panel.background = element_rect(fill = "white", colour = "white", linewidth = 0.5, linetype = "solid"),
+          panel.grid.major = element_line(linewidth = 0.5, linetype = 'solid', colour = "white"),
+          axis.title.y = element_text(colour = "white"), axis.text.y = element_text(colour="white"),
+          axis.ticks.y = element_line(colour = "white"), axis.line.x = element_line(colour = "black"),
+          plot.title = element_text(colour = "white", hjust = 0.5)) +
+    theme(legend.position="bottom") +
+    theme(axis.text.x=element_text(angle=60, hjust=1)) +
+    guides(size = guide_legend(order = 1), colour = guide_colorbar(order = 2), alpha="none")
+
+#### Returns an interactive maps of earthquake epicenters
+library(magrittr)
+dplyr::filter(earthquakes_data_clean2, Country == "MEXICO" & lubridate::year(Date) >= 2000) %>%
+  eq_map(annot_col="Date", -120, -60, 0, 40)
+
+#### Returns an HTML label that can be used as annotation text in interactive maps of earthquake epicenters
+dplyr::filter(earthquakes_data_clean2, Country == "MEXICO" & lubridate::year(Date) >= 2000) %>%
+  dplyr::mutate(popup_text = eq_create_label(.)) %>%
+  eq_map(annot_col="popup_text", -120, -60, 0, 40)
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
