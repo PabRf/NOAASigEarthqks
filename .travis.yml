@@ -20,7 +20,6 @@ r_check_args: --no-build-vignettes --no-manual --timings
 
 os:
   - linux
-  - osx
 
 notifications:
   email:
