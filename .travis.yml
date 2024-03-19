@@ -17,6 +17,8 @@ addons:
      - libpng16-dev
      - libtiff5-dev
      - libjpeg-dev
+     - fontconfig
+     - freetype2
 
 # r versions to test on
 r:
