@@ -14,7 +14,9 @@ env:
 addons:
  apt:
    packages:
-     - libpng-dev
+     - libpng16-dev
+     - libtiff5-dev
+     - libjpeg-dev
 
 # r versions to test on
 r:
