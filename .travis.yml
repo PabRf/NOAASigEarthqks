@@ -17,7 +17,7 @@ addons:
      - libpng16-dev
      - libtiff5-dev
      - libjpeg-dev
-     - systemfonts
+     - systemfonts-dev
 
 # r versions to test on
 r:
