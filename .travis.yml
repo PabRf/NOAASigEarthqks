@@ -14,7 +14,7 @@ env:
 addons:
  apt:
    packages:
-     - libpng
+     - libpng-dev
 
 # r versions to test on
 r:
