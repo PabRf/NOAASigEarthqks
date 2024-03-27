@@ -15,9 +15,6 @@ addons:
  apt:
    packages:
      - libpng16-dev
-     - libtiff5-dev
-     - libjpeg-dev
-     - systemfonts-dev
 
 # r versions to test on
 r:
