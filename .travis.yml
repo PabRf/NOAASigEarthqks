@@ -10,7 +10,7 @@ os:
   - linux
 
 before_install:
-  - sudo apt-get -y install ggiraph-dev
+  - sudo apt-get -y install ggiraph
 
 notifications:
   email:
