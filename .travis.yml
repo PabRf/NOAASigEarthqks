@@ -4,10 +4,9 @@ sudo: true
 cache: packages
 warnings_are_errors: false
 
-r:
-  - release
-os:
-  - linux
+r: release
+os: linux
+dist: trusty
 
 before_install:
   - sudo apt-get install ggiraph
