@@ -8,5 +8,6 @@ os:
 cache: packages
 warnings_are_errors: false
 
-r_binary_packages:
-  - ggiraph
+before_install:
+  - sudo apt-get update
+  - sudo apt-get -y install ggiraph-dev
