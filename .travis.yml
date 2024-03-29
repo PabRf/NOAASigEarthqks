@@ -1,14 +1,10 @@
 # Use R
 language: r
-sudo: true
 cache: packages
 warnings_are_errors: false
 
 r: release
 os: osx
-
-before_install:
-  - sudo apt-get install ggiraph
 
 notifications:
   email:
