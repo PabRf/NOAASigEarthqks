@@ -1,13 +1,19 @@
 # Use R
 language: r
+sudo: true
+cache: packages
+warnings_are_errors: false
+
 r:
   - release
 os:
   - linux
 
-cache: packages
-warnings_are_errors: false
-
 before_install:
   - sudo apt-get update
   - sudo apt-get -y install ggiraph-dev
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
