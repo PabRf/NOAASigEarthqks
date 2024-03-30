@@ -277,30 +277,9 @@ geom_timeline_label = function(mapping = NULL, data = NULL, stat = "identity",
 #' @param y1 Southern latitude limit for plot by 5 degree increments.
 #' @param y2 Northern latitude limit for plot by 5 degree increments.
 #'
-#' @importFrom ggplot2 map_data
-#' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 geom_polygon
-#' @importFrom ggplot2 scale_x_continuous
-#' @importFrom ggplot2 scale_y_continuous
-#' @importFrom ggplot2 theme
-#' @importFrom ggplot2 element_rect
-#' @importFrom ggplot2 element_line
-#' @importFrom ggplot2 element_text
-#' @importFrom ggplot2 ggtitle
-#' @importFrom ggplot2 coord_map
-#' @importFrom ggplot2 geom_text
-#' @importFrom dplyr group_by
-#' @importFrom dplyr arrange
-#' @importFrom dplyr filter
-#' @importFrom dplyr row_number
-#' @importFrom dplyr n
-#' @importFrom ggplot2 guides
-#' @importFrom ggplot2 guide_legend
-#' @importFrom ggiraph geom_point_interactive
-#' @importFrom ggiraph girafe_options
-#' @importFrom ggiraph girafe
-#' @importFrom ggiraph opts_tooltip
+#' @importFrom leaflet addProviderTiles
+#' @importFrom leaflet fitBounds
+#' @importFrom leaflet addCircleMarkers
 #'
 #' @return This function maps earthquake epicenters (LATITUDE/LONGITUDE) and annotates each point within a pop up window
 #'    containing annotation data stored in a column of the data frame. The user can also choose which column is used for
@@ -316,40 +295,14 @@ geom_timeline_label = function(mapping = NULL, data = NULL, stat = "identity",
 #'
 #' @export
 eq_map = function(eq_data, annot_col, x1, x2, y1, y2){
-  region = Longitude = Latitude = group = Mag = NULL
+  providers = Longitude = Latitude = Mag = NULL
   eqData = eq_data
   eqData = as.data.frame(eqData)
-  tooltip = eqData[[annot_col]]
-  data_id = eqData[[annot_col]]
-  mapData = ggplot2::map_data("world", region = ".")
-  colnames(mapData)[1] = "Longitude"
-  colnames(mapData)[2] = "Latitude"
-  gg_map = ggplot2::ggplot(mapData, ggplot2::aes(x=Longitude, y=Latitude, group=group)) +
-    ggplot2::geom_polygon(color="pink", fill="beige") +
-    ggplot2::scale_x_continuous(limits = c(x1,x2), breaks=seq(x1,x2,5)) +
-    ggplot2::scale_y_continuous(limits = c(y1,y2), breaks=seq(y1,y2,5)) +
-    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "lightblue"),
-                   panel.background = ggplot2::element_rect(fill = "lightblue", colour = "lightblue", linewidth = 0.5, linetype = "solid"),
-                   panel.grid.major = ggplot2::element_line(linewidth = 0.5, linetype = 'solid', colour = "lightblue"),
-                   panel.grid.minor = ggplot2::element_line(linewidth = 0.25, linetype = 'solid', colour = "lightblue"),
-                   axis.title.x = ggplot2::element_text(colour = "lightblue"),
-                   axis.title.y = ggplot2::element_text(colour = "lightblue"),
-                   axis.text.x = ggplot2::element_text(colour="lightblue"),
-                   axis.text.y = ggplot2::element_text(colour="lightblue"),
-                   axis.ticks.x = ggplot2::element_line(colour = "lightblue"),
-                   axis.ticks.y = ggplot2::element_line(colour = "lightblue"),
-                   plot.title = ggplot2::element_text(colour = "black", hjust = 0.5)) +
-    ggplot2::ggtitle("NOAA Earthquakes") +
-    ggplot2::coord_map() +
-    ggplot2::geom_text(data=mapData %>% dplyr::group_by(region) %>% dplyr::arrange(Longitude, Latitude) %>%
-                         dplyr::filter(dplyr::row_number()==ceiling(dplyr::n()/2)),
-                       ggplot2::aes(x=Longitude, y=Latitude, label=region, group=group), size=1,
-                       color = "black", na.rm = T) +
-    ggplot2::guides(size = ggplot2::guide_legend(order = 1), alpha="none") +
-    ggiraph::geom_point_interactive(data = eqData,
-                                    ggplot2::aes(x=Longitude, y=Latitude, group=NULL, size=Mag,
-                                                 tooltip=tooltip,data_id=data_id), alpha=0.1, color="blue")
-  ggiraph::girafe_options(ggiraph::girafe(ggobj = gg_map), ggiraph::opts_tooltip(opacity=0.7, use_fill = T, use_stroke = T))
+  leaflet::leaflet() %>%
+  leaflet::addProviderTiles(providers$OpenStreetMap)  %>%
+  leaflet::fitBounds(lng1 = x1, lng2 = x2, lat1 = y1, lat2 = y2) %>%
+  leaflet::addCircleMarkers(data = eqData, lng = ~Longitude, lat = ~Latitude, popup = annot_col, radius = ~Mag,
+                   options = leaflet::popupOptions(keepInView = F), stroke = F, fill = "blue", opacity = 0.7)
 }
 
 

@@ -64,11 +64,11 @@ ggplot() + geom_timeline_label(data=earthquakes_data_final, aes(Date, Country, x
 
 library(magrittr)
 dplyr::filter(earthquakes_data_clean2, Country == "MEXICO" & lubridate::year(Date) >= 2000) %>%
-  eq_map(annot_col="Date", -120, -60, 0, 40)
+  eq_map(annot_col= ~Date, -120, -60, 0, 40)
 
 dplyr::filter(earthquakes_data_clean2, Country == "MEXICO" & lubridate::year(Date) >= 2000) %>%
   dplyr::mutate(popup_text = eq_create_label(.)) %>%
-  eq_map(annot_col="popup_text", -120, -60, 0, 40)
+  eq_map(annot_col= ~popup_text, -120, -60, 0, 40)
 
   
 ```
