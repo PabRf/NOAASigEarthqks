@@ -6,6 +6,14 @@ warnings_are_errors: false
 r: release
 os: linux
 
+addons:
+  apt:
+    packages:
+      - libgdal-dev
+      - libproj-dev
+      - libudunits2-dev
+      - netcdf-bin
+
 notifications:
   email:
     on_success: change
