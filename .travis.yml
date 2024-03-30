@@ -9,10 +9,9 @@ os: linux
 addons:
   apt:
     packages:
-      - libgdal-dev
-      - libproj-dev
-      - libudunits2-dev
-      - netcdf-bin
+      - terra-dev
+      - raster-dev
+      - leaflet-dev
 
 notifications:
   email:
