@@ -3,6 +3,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/PabRf/NOAASigEarthqks/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PabRf/NOAASigEarthqks/actions/workflows/R-CMD-check.yaml)
+[![Build Status](https://app.travis-ci.com/PabRf/NOAASigEarthqks.svg?token=KMwuCq2izC8DxPixs6uj&branch=main)](https://app.travis-ci.com/PabRf/NOAASigEarthqks)
 <!-- badges: end -->
 
 The goal of NOAASigEarthqks is to provide tools for processing and visualizing the NOAA data so users may extract useful information embedded within.

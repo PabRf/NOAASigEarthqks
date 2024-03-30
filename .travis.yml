@@ -4,14 +4,12 @@ cache: packages
 warnings_are_errors: false
 
 r: release
-os: linux
+os: osx
 
-addons:
-  apt:
-    packages:
-      - terra-dev
-      - raster-dev
-      - leaflet-dev
+before_install:
+  - sudo apt-get -y install terra-dev
+  - sudo apt-get -y install raster-dev
+  - sudo apt-get -y install leaflet-dev
 
 notifications:
   email:
