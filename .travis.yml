@@ -7,9 +7,9 @@ r: release
 os: linux
 
 before_install:
-  - sudo apt-get -y install terra-dev
-  - sudo apt-get -y install raster-dev
-  - sudo apt-get -y install leaflet-dev
+  - sudo apt-get -y install terra
+  - sudo apt-get -y install raster
+  - sudo apt-get -y install leaflet
 
 notifications:
   email:
