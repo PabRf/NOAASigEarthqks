@@ -131,6 +131,11 @@ eq_filter_data = function(filename, xmin, xmax, columns){
 #' @importFrom ggplot2 aes
 #' @importFrom grid gList
 #'
+#' @note Example: ggproto("GeomTimeline", ggplot2::Geom, required_aes = c("x"),
+#'    draw_panel = function(data, panel_params, coord, ...) {
+#'    point = transform(data) }
+#'    )
+#'
 #' @return The ggproto function returns an object of class GeomTimeline for input as the default geom for
 #' the user facing geom_timeline() function.
 #'
@@ -191,12 +196,18 @@ geom_timeline = function(mapping = NULL, data = NULL, stat = "identity",
 
 #' GeomTimelineLabel class
 #'
-#' A new class corresponding to the geom_timeline geom.
+#' A new class corresponding to the geom_timeline_label geom.
 #'
 #' @importFrom ggplot2 ggproto
 #' @importFrom ggplot2 Geom
 #' @importFrom ggplot2 aes
 #' @importFrom grid gList
+#'
+#' @note Example: ggproto("GeomTimelineLabel", ggplot2::Geom, required_aes = c("x", "y", "xend", "yend"),
+#'    draw_panel = function(data, panel_params, coord, ...) {
+#'    point1 = transform(data)
+#'    point2 = transform(data, x=xend, y=yend) }
+#'    )
 #'
 #' @return The ggproto function returns an object of class GeomTimelineLabel for input as the default geom for
 #' the user facing geom_timeline_label() function.

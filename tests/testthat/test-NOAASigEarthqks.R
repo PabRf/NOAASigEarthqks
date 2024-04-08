@@ -22,10 +22,18 @@ test_that("eq_filter_data", {
   expect_equal(nrow(data), 36)
 })
 
+test_that("GeomTimeline", {
+  expect_equal(attr(GeomTimeline, "dim"), NULL)
+})
+
 test_that("geom_timeline", {
   data = readr::read_csv("earthquakes_data_final.csv", col_names = T, progress = FALSE)
   data = ggplot2::ggplot() + geom_timeline(data=data, ggplot2::aes(Date, y=0.2, size=Mag, colour=Deaths), alpha=0.3)
   expect_equal(data$labels$x, "Date")
+})
+
+test_that("GeomTimelineLabel", {
+  expect_equal(attr(GeomTimeline, "dim"), NULL)
 })
 
 test_that("geom_timeline_label", {
@@ -39,7 +47,8 @@ test_that("eq_map", {
   data = readr::read_csv("earthquakes_data_clean2.csv", col_names = T, progress = FALSE)
   data = dplyr::filter(data, Country == "MEXICO" & lubridate::year(Date) >= 2000)
   library(magrittr)
-  expect_equal(nrow(data), 28)
+  data = eq_map(data, annot_col="Date", -120, -60, 0, 40)
+  expect_equal(data$x$fitBounds[[2]], -120)
 })
 
 test_that("eq_create_label", {

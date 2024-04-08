@@ -25,6 +25,8 @@ The NOAASigEarthqks functions clean the raw NOAA data frame.
   
   . eq_filter_data() further filters and selects the data to produce the final NOAA data frame for analysis.
   
+  . ggproto creates the appropriate class for the geom_timeline and geom_timeline_label geoms
+  
   . geom_timeline() produces a layer, that consists of the time line of selected earthquakes ranging from min to
   max dates (with a point for each earthquake).
   
@@ -47,8 +49,19 @@ eq_clean_data("earthquakes_data_clean1.csv")
 
 eq_filter_data("earthquakes_data_clean2.csv", xmin = as.Date("1950-01-01", "%Y-%m-%d"), xmax = as.Date("1955-01-01", "%Y-%m-%d"), c("Date", "xend", "y", "yend", "Mag", "Deaths", "Country"))
 
+ggproto("GeomTimeline", ggplot2::Geom, required_aes = c("x"),
+    draw_panel = function(data, panel_params, coord, ...) {
+    point = transform(data) }
+    )
+
 ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, y=0.2, size=Mag, colour=Deaths), alpha=0.3)
 ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, Country, size=Mag, colour=Deaths), alpha=0.3)
+
+ggproto("GeomTimelineLabel", ggplot2::Geom, required_aes = c("x", "y", "xend", "yend"),
+    draw_panel = function(data, panel_params, coord, ...) {
+    point1 = transform(data)
+    point2 = transform(data, x=xend, y=yend) }
+    )
 
 ggplot() + geom_timeline_label(data=earthquakes_data_final, aes(Date, y=0.2, xend=xend, yend=yend, size=Mag, colour=Deaths,
   label=Country), alpha=0.3) 
@@ -117,6 +130,8 @@ y2              Northern latitude limit for plot by 5 degree increments.
 
   . eq_filter_data() returns the final NOAA data frame for analysis after further row filtering and column selection.
   
+  . ggproto returns appropriate class for the geom_timeline and geom_timeline_label geoms
+  
   . geom_timeline returns a layer, that consists of the time line of selected earthquakes ranging from min to
   max dates (with a point for each earthquake).
   
@@ -141,10 +156,23 @@ eq_clean_data("earthquakes_data_clean1.csv")
 #### Row filtering and column selection
 eq_filter_data("earthquakes_data_clean2.csv", xmin = as.Date("1950-01-01", "%Y-%m-%d"), xmax = as.Date("1955-01-01", "%Y-%m-%d"), c("Date", "xend", "y", "yend", "Mag", "Deaths", "Country"))
 
+#### Create GeomTimeline class
+ggproto("GeomTimeline", ggplot2::Geom, required_aes = c("x"),
+    draw_panel = function(data, panel_params, coord, ...) {
+    point = transform(data) }
+    )
+
 #### Returns a layer of the time line of selected earthquakes
 ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, y=0.2, size=Mag, colour=Deaths), alpha=0.3)
 
 ggplot() + geom_timeline(data=earthquakes_data_final, aes(Date, Country, size=Mag, colour=Deaths), alpha=0.3)
+
+#### Create GeomTimelineLabel class
+ggproto("GeomTimelineLabel", ggplot2::Geom, required_aes = c("x", "y", "xend", "yend"),
+    draw_panel = function(data, panel_params, coord, ...) {
+    point1 = transform(data)
+    point2 = transform(data, x=xend, y=yend) }
+    )
 
 #### Returns a layer of the time line of selected earthquakes with text annotation
 ggplot() + geom_timeline_label(data=earthquakes_data_final, aes(Date, y=0.2, xend=xend, yend=yend, size=Mag, colour=Deaths, label=Country), alpha=0.3) +

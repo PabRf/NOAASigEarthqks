@@ -17,4 +17,10 @@ the user facing geom_timeline() function.
 \description{
 A new class corresponding to the geom_timeline geom.
 }
+\note{
+Example: ggproto("GeomTimeline", ggplot2::Geom, required_aes = c("x"),
+draw_panel = function(data, panel_params, coord, ...) {
+point = transform(data) }
+)
+}
 \keyword{datasets}

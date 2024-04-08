@@ -15,6 +15,13 @@ The ggproto function returns an object of class GeomTimelineLabel for input as t
 the user facing geom_timeline_label() function.
 }
 \description{
-A new class corresponding to the geom_timeline geom.
+A new class corresponding to the geom_timeline_label geom.
+}
+\note{
+Example: ggproto("GeomTimelineLabel", ggplot2::Geom, required_aes = c("x", "y", "xend", "yend"),
+draw_panel = function(data, panel_params, coord, ...) {
+point1 = transform(data)
+point2 = transform(data, x=xend, y=yend) }
+)
 }
 \keyword{datasets}
