@@ -351,3 +351,5 @@ eq_create_label = function(data){
             ifelse(is.na(.$Deaths)==F, {paste("<B>Total Deaths: </B>", .$Deaths)}, {""}), "\n")}
 }
 
+
+#####################
